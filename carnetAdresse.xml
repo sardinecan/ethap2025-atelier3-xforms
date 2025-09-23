@@ -21,7 +21,7 @@
          <listPerson>
             <person>
                <persName></persName>
-               <birth></birth>
+               <birth when=""></birth>
                <residence>
                   <address>
                      <addrLine></addrLine>

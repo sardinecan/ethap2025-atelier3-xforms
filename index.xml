@@ -49,7 +49,7 @@
             <xs:schema targetNamespace="http://ethap2025/ns/1.0">
                 <xs:simpleType name="phone">
                     <xs:restriction base="xs:string">
-                        <xs:pattern value="(.|\n|\r)*\S(.|\n|\r)*"/>
+                        <xs:pattern value="^(\d{2}\s?){5}"/>
                     </xs:restriction>
                 </xs:simpleType>
                 <xs:simpleType name="email">
@@ -62,7 +62,9 @@
             <xf:bind nodeset="tei:persName" required="true()"/>
             <xf:bind nodeset="instance('addressBook')//@when" type="xf:date"/>
             <xf:bind nodeset="instance('addressBook')//tei:ptr[@type='email']/@target" type="etp:email"/>
+            <xf:bind nodeset="instance('addressBook')//tei:ptr[@type='phone']/@target" type="etp:phone"/>
 
+            <xf:submission method="put" resource="file:" mediatype="application/xml"/>
         </xf:model>
     </head>
     <body>
@@ -88,19 +90,37 @@
             </xf:group>
             <xf:group>
                 <xf:label>Contacts</xf:label>
-                <xf:repeat nodeset="tei:ptr">
+                <xf:repeat nodeset="tei:ptr" id="contact">
                     <xf:select1 ref="@type">
                         <xf:label>Type</xf:label>
                         <xf:itemset nodeset="instance('contactTypes')/etp:type">
                             <xf:label ref="etp:label"/>
                             <xf:value ref="etp:value"/>
-                            <xf:rebuild ev:event="xforms-value-changed" model="addressModel"/>
                         </xf:itemset>
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:rebuild/>
+                        </xf:action>
                     </xf:select1>
-                    <xf:input ref="@target" incremental="true"/>
+                    <xf:input ref="@target"/>
+                    <xf:trigger>
+                        <xf:label>+</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="." at="index('contact')" position="after"/>
+                            <xf:setvalue ref="//tei:ptr[index('contact')]/@*"/>
+                        </xf:action>
+                    </xf:trigger>
                 </xf:repeat>
+                <xf:trigger>
+                    <xf:label>+</xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="tei:ptr" position="last()"/>
+                        <xf:setvalue ref="//tei:ptr[last()]/@*"/>
+                    </xf:action>
+                </xf:trigger>
             </xf:group>
-            <xf:output value="serialize(.)"/>
+            <xf:submit>
+                <xf:label>Sauvegarder</xf:label>
+            </xf:submit>
         </xf:group>
     </body>
 </html>
