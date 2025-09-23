@@ -17,7 +17,7 @@
     <head>
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover" charset="utf8"/>
         <title>Hello XForms</title>
-        <xf:model>
+        <xf:model id="addressModel">
             <xf:instance id="addressBook">
                 <person xmlns="http://www.tei-c.org/ns/1.0">
                     <persName></persName>
@@ -32,10 +32,38 @@
                     <ptr type="" target=""/>
                 </person>
             </xf:instance>
-        </xf:model>
 
-        <xf:bind nodeset="tei:persName" required="true()"/>
-        <xf:bind nodeset="instance('addressBook')//@when" type="xf:date"/>
+            <xf:instance id="contactTypes">
+                <types xmlns="http://ethap2025/ns/1.0">
+                    <type>
+                        <label>Téléphone</label>
+                        <value>phone</value>
+                    </type>
+                    <type>
+                        <label>Email</label>
+                        <value>email</value>
+                    </type>
+                </types>
+            </xf:instance>
+
+            <xs:schema targetNamespace="http://ethap2025/ns/1.0">
+                <xs:simpleType name="phone">
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="(.|\n|\r)*\S(.|\n|\r)*"/>
+                    </xs:restriction>
+                </xs:simpleType>
+                <xs:simpleType name="email">
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="^[^@]+@[^@]+"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:schema>
+
+            <xf:bind nodeset="tei:persName" required="true()"/>
+            <xf:bind nodeset="instance('addressBook')//@when" type="xf:date"/>
+            <xf:bind nodeset="instance('addressBook')//tei:ptr[@type='email']/@target" type="etp:email"/>
+
+        </xf:model>
     </head>
     <body>
         <h1>Carnet d'adresse avec XForms</h1>
@@ -63,18 +91,16 @@
                 <xf:repeat nodeset="tei:ptr">
                     <xf:select1 ref="@type">
                         <xf:label>Type</xf:label>
-                        <xf:item>
-                            <xf:label>Téléphone</xf:label>
-                            <xf:value>phone</xf:value>
-                        </xf:item>
-                        <xf:item>
-                            <xf:label>Email</xf:label>
-                            <xf:value>email</xf:value>
-                        </xf:item>
+                        <xf:itemset nodeset="instance('contactTypes')/etp:type">
+                            <xf:label ref="etp:label"/>
+                            <xf:value ref="etp:value"/>
+                            <xf:rebuild ev:event="xforms-value-changed" model="addressModel"/>
+                        </xf:itemset>
                     </xf:select1>
-                    <xf:input ref="@target"></xf:input>
+                    <xf:input ref="@target" incremental="true"/>
                 </xf:repeat>
             </xf:group>
+            <xf:output value="serialize(.)"/>
         </xf:group>
     </body>
 </html>
