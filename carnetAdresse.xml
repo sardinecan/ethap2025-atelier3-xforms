@@ -25,6 +25,8 @@
                <residence>
                   <address>
                      <addrLine></addrLine>
+                     <addrLine></addrLine>
+                     <addrLine></addrLine>
                   </address>
                </residence>
                <ptr type="phone" target="+331234567890"/>

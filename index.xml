@@ -1,22 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?>
 <html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xf="http://www.w3.org/2002/xforms"
-    xmlns:ev="http://www.w3.org/2001/xml-events"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:etp="http://ethap2025/ns/1.0"
-    xmlns:tei="http://www.tei-c.org/ns/1.0"
-    etp:bogus="fix/Firefox/namespace/issue"
-    tei:bogus="fix/Firefox/namespace/issue"
-    xlink:bogus="fix/Firefox/namespace/issue"
-    lang="fr">
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:ev="http://www.w3.org/2001/xml-events"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:etp="http://ethap2025/ns/1.0"
+        xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:x="http://www.w3.org/1999/xhtml"
+        etp:bogus="fix/Firefox/namespace/issue"
+        tei:bogus="fix/Firefox/namespace/issue"
+        xlink:bogus="fix/Firefox/namespace/issue"
+        xf:bogus="fix/Firefox/namespace/issue"
+        xs:bogus="fix/Firefox/namespace/issue"
+        lang="fr">
     <head>
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover" charset="utf8"/>
         <title>Hello XForms</title>
+        <xf:model>
+            <xf:instance id="addressBook">
+                <person xmlns="http://www.tei-c.org/ns/1.0">
+                    <persName></persName>
+                    <birth when=""/>
+                    <residence>
+                        <address>
+                            <addrLine></addrLine>
+                            <addrLine></addrLine>
+                            <addrLine></addrLine>
+                        </address>
+                    </residence>
+                    <ptr type="" target=""/>
+                </person>
+            </xf:instance>
+        </xf:model>
+
+        <xf:bind nodeset="tei:persName" required="true()"/>
+        <xf:bind nodeset="instance('addressBook')//@when" type="xf:date"/>
     </head>
     <body>
-        
+        <h1>Carnet d'adresse avec XForms</h1>
+        <xf:group ref="instance('addressBook')">
+            <xf:label>Personne</xf:label>
+            <xf:input ref="tei:persName">
+                <xf:label>Nom</xf:label>
+            </xf:input>
+            <xf:input ref="tei:birth/@when">
+                <xf:label>Anniversaire</xf:label>
+            </xf:input>
+            <xf:group ref="tei:residence/tei:address">
+                <xf:input ref="tei:addrLine[1]">
+                    <xf:label>Rue</xf:label>
+                </xf:input>
+                <xf:input ref="tei:addrLine[2]">
+                    <xf:label>Code postal</xf:label>
+                </xf:input>
+                <xf:input ref="tei:addrLine[3]">
+                    <xf:label>Ville</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group>
+                <xf:label>Contacts</xf:label>
+                <xf:repeat nodeset="tei:ptr">
+                    <xf:select1 ref="@type">
+                        <xf:label>Type</xf:label>
+                        <xf:item>
+                            <xf:label>Téléphone</xf:label>
+                            <xf:value>phone</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Email</xf:label>
+                            <xf:value>email</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                    <xf:input ref="@target"></xf:input>
+                </xf:repeat>
+            </xf:group>
+        </xf:group>
     </body>
 </html>
