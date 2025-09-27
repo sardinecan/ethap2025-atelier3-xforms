@@ -3,36 +3,23 @@
 <html
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:xf="http://www.w3.org/2002/xforms"
+        xf:bogus="fix/Firefox/namespace/issue"
         xmlns:ev="http://www.w3.org/2001/xml-events"
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        xmlns:etp="http://ethap2025/ns/1.0"
-        xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:x="http://www.w3.org/1999/xhtml"
-        etp:bogus="fix/Firefox/namespace/issue"
-        tei:bogus="fix/Firefox/namespace/issue"
-        xlink:bogus="fix/Firefox/namespace/issue"
-        xf:bogus="fix/Firefox/namespace/issue"
         xs:bogus="fix/Firefox/namespace/issue"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xlink:bogus="fix/Firefox/namespace/issue"
+        xmlns:etp="http://ethap2025/ns/1.0"
+        etp:bogus="fix/Firefox/namespace/issue"
+        xmlns:tei="http://www.tei-c.org/ns/1.0"
+        tei:bogus="fix/Firefox/namespace/issue"
+        xmlns:x="http://www.w3.org/1999/xhtml"
         lang="fr">
     <head>
         <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover" charset="utf8"/>
-        <title>Hello XForms</title>
+        <title>Ethap 2025 - Atelier 3 XForms</title>
         <xf:model id="addressModel">
-            <xf:instance id="addressBook">
-                <person xmlns="http://www.tei-c.org/ns/1.0">
-                    <persName></persName>
-                    <birth when=""/>
-                    <residence>
-                        <address>
-                            <addrLine></addrLine>
-                            <addrLine></addrLine>
-                            <addrLine></addrLine>
-                        </address>
-                    </residence>
-                    <ptr type="" target=""/>
-                </person>
-            </xf:instance>
-
+            <xf:instance id="addressBook" src="addressBook.xml" />
             <xf:instance id="contactTypes">
                 <types xmlns="http://ethap2025/ns/1.0">
                     <type>
@@ -59,62 +46,62 @@
                 </xs:simpleType>
             </xs:schema>
 
-            <xf:bind nodeset="tei:persName" required="true()"/>
-            <xf:bind nodeset="instance('addressBook')//@when" type="xf:date"/>
-            <xf:bind nodeset="instance('addressBook')//tei:ptr[@type='email']/@target" type="etp:email"/>
-            <xf:bind nodeset="instance('addressBook')//tei:ptr[@type='phone']/@target" type="etp:phone"/>
+            <xf:bind nodeset="etp:name" required="true()"/>
+            <xf:bind nodeset="//@when" type="xf:date"/>
+            <xf:bind nodeset="//etp:contact[@type='email']" type="etp:email"/>
+            <xf:bind nodeset="//etp:contact[@type='phone']" type="etp:phone"/>
 
-            <xf:submission method="put" resource="file:" mediatype="application/xml"/>
+            <xf:submission method="put" resource="file:contact.xml" mediatype="application/xml"/>
         </xf:model>
     </head>
     <body>
-        <h1>Carnet d'adresse avec XForms</h1>
+        <h1>Carnet d'adresses avec XForms</h1>
         <xf:group ref="instance('addressBook')">
             <xf:label>Personne</xf:label>
-            <xf:input ref="tei:persName">
+            <xf:input ref="etp:name">
                 <xf:label>Nom</xf:label>
             </xf:input>
-            <xf:input ref="tei:birth/@when">
+            <xf:input ref="etp:birth/@when">
                 <xf:label>Anniversaire</xf:label>
             </xf:input>
-            <xf:group ref="tei:residence/tei:address">
-                <xf:input ref="tei:addrLine[1]">
+            <xf:group ref="etp:address">
+                <xf:input ref="etp:street">
                     <xf:label>Rue</xf:label>
                 </xf:input>
-                <xf:input ref="tei:addrLine[2]">
+                <xf:input ref="etp:zipcode">
                     <xf:label>Code postal</xf:label>
                 </xf:input>
-                <xf:input ref="tei:addrLine[3]">
+                <xf:input ref="etp:city">
                     <xf:label>Ville</xf:label>
                 </xf:input>
             </xf:group>
             <xf:group>
                 <xf:label>Contacts</xf:label>
-                <xf:repeat nodeset="tei:ptr" id="contact">
+                <xf:repeat nodeset="etp:contact" id="contact">
                     <xf:select1 ref="@type">
                         <xf:label>Type</xf:label>
                         <xf:itemset nodeset="instance('contactTypes')/etp:type">
                             <xf:label ref="etp:label"/>
                             <xf:value ref="etp:value"/>
                         </xf:itemset>
-                        <xf:action ev:event="xforms-value-changed">
-                            <xf:rebuild/>
-                        </xf:action>
+                        <xf:action ev:event="DOMFocusOut"><xf:rebuild/></xf:action>
                     </xf:select1>
-                    <xf:input ref="@target"/>
+                    <xf:input ref="."/>
                     <xf:trigger>
                         <xf:label>+</xf:label>
                         <xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="." at="index('contact')" position="after"/>
-                            <xf:setvalue ref="//tei:ptr[index('contact')]/@*"/>
+                            <xf:setvalue ref="//etp:contact[index('contact')]/@*"/>
+                            <xf:setvalue ref="//etp:contact[index('contact')]"/>
                         </xf:action>
                     </xf:trigger>
                 </xf:repeat>
                 <xf:trigger>
                     <xf:label>+</xf:label>
                     <xf:action ev:event="DOMActivate">
-                        <xf:insert nodeset="tei:ptr" position="last()"/>
-                        <xf:setvalue ref="//tei:ptr[last()]/@*"/>
+                        <xf:insert nodeset="etp:contact" position="last()"/>
+                        <xf:setvalue ref="//etp:contact[last()]/@*"/>
+                        <xf:setvalue ref="//etp:contact[last()]"/>
                     </xf:action>
                 </xf:trigger>
             </xf:group>
