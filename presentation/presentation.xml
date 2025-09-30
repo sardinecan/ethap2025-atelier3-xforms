@@ -32,8 +32,16 @@
                         <file>02objectifs.xhtml</file>
                     </entry>
                     <entry>
-                        <title>Il était une fois XForms</title>
-                        <file>03onceuponatime.xhtml</file>
+                        <title>XForms Quésaco ?</title>
+                        <file>03aquesaco.xhtml</file>
+                    </entry>
+                    <entry>
+                        <title>Historique de XForms</title>
+                        <file>03bhistorique.xhtml</file>
+                    </entry>
+                    <entry>
+                        <title>Principes de fonctionnement</title>
+                        <file>03cfonctionnement.xhtml</file>
                     </entry>
                     <entry>
                         <title>Configuration</title>

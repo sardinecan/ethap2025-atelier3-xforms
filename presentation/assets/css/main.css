@@ -158,6 +158,10 @@ h1 > * {
   font-size: .6em;
 }
 
+.soft {
+  opacity: 60%;
+}
+
 xforms-textarea  textarea {
   width: 40em;
   height: 10em;
