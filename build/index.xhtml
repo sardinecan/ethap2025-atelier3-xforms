@@ -1,0 +1,178 @@
+<?xml-stylesheet href="../assets/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:etp="http://ethap2025/ns/1.0"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:h="http://www.w3.org/1999/xhtml"
+      xmlns:tei="http://www.tei-c.org/ns/1.0"
+      xmlns:x="http://www.w3.org/1999/xhtml"
+      xmlns:xf="http://www.w3.org/2002/xforms"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema"
+      xf:bogus="fix/Firefox/namespace/issue"
+      xs:bogus="fix/Firefox/namespace/issue"
+      xlink:bogus="fix/Firefox/namespace/issue"
+      etp:bogus="fix/Firefox/namespace/issue"
+      tei:bogus="fix/Firefox/namespace/issue"
+      lang="fr">
+   <head>
+      <meta name="viewport"
+            content="initial-scale=1, width=device-width, viewport-fit=cover"
+            charset="utf8"/>
+      <title>AHN 2026 - XForms</title>
+      <link rel="stylesheet" href="../assets/css/main.css" type="text/css"/>
+      <model xmlns="http://www.w3.org/2002/xforms">
+         <instance id="tutorial">
+            <tutorial>
+               <entry>
+                  <title>ETHAP 2025</title>
+                  <file>slide1.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Objectifs</title>
+                  <file>slide2.xhtml</file>
+               </entry>
+               <entry>
+                  <title>XForms quésaco ?</title>
+                  <file>slide3.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Historique de XForms</title>
+                  <file>slide4.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Fonctionnement de XForms</title>
+                  <file>slide5.xhtml</file>
+               </entry>
+               <entry>
+                  <title>XForms</title>
+                  <file>slide6.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Configuration</title>
+                  <file>slide7.xhtml</file>
+               </entry>
+               <entry>
+                  <title>L’architecture MVC de XForms</title>
+                  <file>slide8.xhtml</file>
+               </entry>
+               <entry>
+                  <title>L’architecture MVC de XForms - exemple</title>
+                  <file>slide9.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Les mains dans le code</title>
+                  <file>slide10.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Le modèle</title>
+                  <file>slide11.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Le modèle - sérialisation XML</title>
+                  <file>slide12.xhtml</file>
+               </entry>
+               <entry>
+                  <title>La vue - les contrôles simples</title>
+                  <file>slide13.xhtml</file>
+               </entry>
+               <entry>
+                  <title>La vue - les collections</title>
+                  <file>slide14.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Les collections - exemple</title>
+                  <file>slide15.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Contrôleur - Actions</title>
+                  <file>slide16.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Contrôleur - Actions - exemple</title>
+                  <file>slide17.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Contrôleur - Validation</title>
+                  <file>slide18.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Contrôleur - Validation - exemple</title>
+                  <file>slide19.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Contrôleur - Soumission</title>
+                  <file>slide20.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Contrôleur - Soumission - exemple</title>
+                  <file>slide21.xhtml</file>
+               </entry>
+               <entry>
+                  <title>Références</title>
+                  <file>slide22.xhtml</file>
+               </entry>
+               <entry>
+                  <title>The End</title>
+                  <file>slide23.xhtml</file>
+               </entry>
+            </tutorial>
+         </instance>
+         <instance id="nav">
+            <nav xmlns="">
+               <base/>
+               <file/>
+               <url/>
+            </nav>
+         </instance>
+         <bind ref="instance('nav')/url" calculate="concat(../base, ../file)"/>
+         <submission id="save"
+                     ref="instance('nav')"
+                     resource="nav.xml"
+                     method="put"
+                     replace="none"/>
+         <submission id="restore"
+                     replace="instance"
+                     instance="nav"
+                     resource="nav.xml"
+                     method="get"
+                     serialization="none"/>
+         <action ev:event="xforms-ready">
+            <setvalue ref="instance('nav')/file" value="instance('tutorial')/entry[1]/file"/>
+            <send submission="restore"/>
+         </action>
+      </model>
+   </head>
+   <body>
+      <group xmlns="http://www.w3.org/2002/xforms">
+         <action ev:event="xforms-value-changed">
+            <send submission="save"/>
+         </action>
+         <group>
+            <trigger ref="instance('tutorial')/entry[file=instance('nav')/file]/preceding-sibling::entry[1]">
+               <label>←</label>
+               <hint>
+                  <output ref="title"/>
+               </hint>
+               <setvalue ref="instance('nav')/file"
+                         value="context()/file"
+                         ev:event="DOMActivate"/>
+            </trigger>
+            <select1 ref="instance('nav')/file" appearance="{instance('nav')/appearance}">
+               <itemset ref="instance('tutorial')/entry">
+                  <label ref="title"/>
+                  <value value="file"/>
+               </itemset>
+            </select1>
+            <trigger ref="instance('tutorial')/entry[file=instance('nav')/file]/following-sibling::entry">
+               <label>→</label>
+               <hint>
+                  <output ref="title"/>
+               </hint>
+               <setvalue ref="instance('nav')/file"
+                         value="context()/file"
+                         ev:event="DOMActivate"/>
+            </trigger>
+         </group>
+         <h:iframe id="whyisthisneeded" src="{instance('nav')/url}"/>
+      </group>
+   </body>
+</html>
