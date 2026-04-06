@@ -6,7 +6,10 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title>AHN 2026 - XForms</title>
+                <title>ETHAP 2025 - Atelier 3</title>
+                <title type="subtitle">Initiation aux XForms</title>
+                <author>Josselin Morvan (université de Rouen Normandie)</author>
+                <author>Emmanuel Château-Dutier (université de Montréal)</author>
             </titleStmt>
             <publicationStmt>
                 <p>Document nativement numérique</p>
