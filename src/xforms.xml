@@ -142,7 +142,7 @@ chemin/vers/basex/webapp/static/
       </xf:output>
    </body>
 </html>
-               ]]>
+                        ]]>
                         </egXML>
                         <div>
                             <xf:input ref="/data/prenom" incremental="true">
